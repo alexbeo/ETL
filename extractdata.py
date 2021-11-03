@@ -10,7 +10,6 @@ import imapclient
 
 
 
-
 def load_file_from_email_imap4(
         mail_from,
         imap_server,
@@ -44,7 +43,7 @@ def load_file_from_email_imap4(
             print(raw_email)
         except TypeError as te:
             email_message = email.message_from_bytes(raw_email)
-            print(f'Ошибка соеденения {te}')
+            print(f'Ошибка соединения {te}')
 
         print("--- нашли письмо от: ", email.header.make_header(email.header.decode_header(email_message['From'])))
         print(type(email.header.make_header(email.header.decode_header(email_message['From']))))
@@ -56,15 +55,36 @@ def load_file_from_email_imap4(
                 if not filename:
                     filename = "test.txt"
                 print("---- нашли вложение ", filename)
+                # mime = magic.Magic(mime=True)
+                # type_of_file = mime.from_file(filename)
+                # print(f'Тип файла {type_of_file}')
+
                 if filename.endswith(filetype):
-                    with open(os.path.join(save_data_dir, filename), 'wb') as fp:
-                        fp.write(part.get_payload(decode=True))
-                    print("-- удаляем письмо")
-                    mail.store(num, '+FLAGS', '(\Deleted)')
-                    mail.expunge()
-                    shutil.copy2(os.path.join(save_data_dir, filename), os.path.join(config.TODAY_TMP_DIR, filename))
-    mail.close()
-    mail.logout()
+                    try:
+                        with open(os.path.join(save_data_dir, filename), 'wb') as fp:
+                            fp.write(part.get_payload(decode=True))
+                        print("-- удаляем письмо")
+                    except Exception as ex:
+                        print(f'Возникло исключение при попытке записи файла {ex}')
+
+                    try:
+                        mail.store(num, '+FLAGS', '(\Deleted)')
+                        mail.expunge()
+                    except Exception as ex:
+                        print(f'Возникло исключение при попытке записи файла {ex}')
+
+                    try:
+                        shutil.copy2(os.path.join(save_data_dir, filename),
+                                     os.path.join(config.TODAY_TMP_DIR, filename))
+                    except Exception as ex:
+                        print(f'Возникло исключение при попытке записи файла {ex}')
+
+    try:
+        mail.close()
+        mail.logout()
+    except Exception as ex:
+        print(f'Возникло исключение при попытке записи файла {ex}')
+
 
 
 if __name__ == '__main__':
@@ -75,5 +95,5 @@ if __name__ == '__main__':
         login=MAIL_LOGIN_DAILY_REPORTS,
         password=MAIL_PASSWORD1,
         save_data_dir=DAILY_PS_TRANSACTION,
-        filetype='.csv',
+        filetype='..csv',
     )
