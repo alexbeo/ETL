@@ -19,7 +19,6 @@ def save_file_for_view(file_name, file_to_save):
     df = df.reindex(columns=['DATE', 'DAYWEEK', 'HOUR', 'MINUTE', 'SERBRTAGA', 'REGOZNIZLAZ', 'RELACIJA', 'Enter', 'Exit', 'IZNOSDUGUJE'])
     del(df['RELACIJA'])
     del(df['DATE'])
-
     df.columns = ['ДЕНЬ НЕДЕЛИ', 'ЧАСЫ', 'МИНУТЫ', 'ТАГ', 'ГОСНОМЕР', 'ВЪЕЗД', 'ВЫЕЗД', 'К ОПЛАТЕ']
     df = df.loc['2021-11']
     sum = df['К ОПЛАТЕ'].sum()
