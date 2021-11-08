@@ -5,17 +5,9 @@ from config import COLUMN_FOR_VIEW
 def save_file_for_view(file_name, file_to_save):
     df = pd.read_csv(file_name, index_col=0, )
     df = df[COLUMN_FOR_VIEW]
-
     df['DATE'] = pd.to_datetime(df['VREME_NAPLATE'], format='%d.%m.%Y %H:%M:%S')
     df['ДАТА'] = pd.to_datetime(df['DATE'].dt.date)
-
     df = df.set_index('ДАТА')
-    print(type(df))
-    print(df.index)
-    # print(df['2021-11'])
-    # df = df['2021-10']
-    # df = df.loc['2021-10-11':'2021-10-31']
-
     df['DAYWEEK'] = df['DATE'].dt.dayofweek
     df['HOUR'] = df['DATE'].dt.hour
     df['MINUTE'] = df['DATE'].dt.minute
@@ -29,7 +21,7 @@ def save_file_for_view(file_name, file_to_save):
     del(df['DATE'])
 
     df.columns = ['ДЕНЬ НЕДЕЛИ', 'ЧАСЫ', 'МИНУТЫ', 'ТАГ', 'ГОСНОМЕР', 'ВЪЕЗД', 'ВЫЕЗД', 'К ОПЛАТЕ']
-    df = df.loc['2021-10']
+    df = df.loc['2021-11']
     sum = df['К ОПЛАТЕ'].sum()
     count = len(df)
     print(df.info())
