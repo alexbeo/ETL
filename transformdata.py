@@ -4,6 +4,7 @@ import os
 import config
 import pandas as pd
 
+
 # Создание объединенного csv файла с нуля
 def create_report_file_from_drps(path_to_reports_files, file_mask):
     list_files = glob.glob(path_to_reports_files + file_mask)
@@ -17,6 +18,7 @@ def create_report_file_from_drps(path_to_reports_files, file_mask):
                 if i != 0:
                     csv.readline()
                 shutil.copyfileobj(csv, file)
+
 
 # Ежедневное добавление нового файла в объединенный отчет
 def append_daily_report_ps_file(path_today_daily_report, path_ps_daily_report, file_mask):
@@ -37,8 +39,8 @@ def append_daily_report_ps_file(path_today_daily_report, path_ps_daily_report, f
 
 
 if __name__ == '__main__':
-    # create_report_file_from_drps(config.DAILY_PS_TRANSACTION, '/*.csv')
+    create_report_file_from_drps(config.DAILY_PS_TRANSACTION, '/*.csv')
     file= os.path.join(config.PATH_TO_DAILY_REPORT_FILE_PS,config.REPORT_D_PS)
     df = pd.read_csv(file)
     print(df.info())
-    append_daily_report_ps_file('inputfiles/fromps/today_tmp_report_dir','transformfiles/ps_daily_report','/*.csv')
+    # append_daily_report_ps_file('inputfiles/fromps/today_tmp_report_dir','transformfiles/ps_daily_report','/*.csv')
