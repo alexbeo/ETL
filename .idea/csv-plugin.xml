@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\inputfiles\fromps\dailytransactionreports\Izvod prometa za 09.11.2021..csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\inputfiles\fromps\dailytransactionreports\Izvod prometa za 17.10.2021..csv">
           <value>
             <Attribute>
