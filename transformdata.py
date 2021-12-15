@@ -26,10 +26,16 @@ def append_daily_report_ps_file(path_today_daily_report, path_ps_daily_report, f
         today_file = glob.glob(path_today_daily_report + file_mask)[0]
         report_file = glob.glob(path_ps_daily_report + file_mask)[0]
         print(today_file, report_file)
-        df1 = pd.read_csv(report_file)
-        print(df1.info())
-        df2 = pd.read_csv(today_file, index_col=None)
-        print(df2.info())
+        try:
+            df1 = pd.read_csv(report_file)
+            print(df1.info())
+        except Exception as ex:
+            print(f'Ошибка открытия файла {report_file} {ex}')
+        try:
+            df2 = pd.read_csv(today_file, index_col=None)
+            print(df2.info())
+        except Exception as ex:
+            print(f'Ошибка открытия файла {report_file} {ex}')
         df3 = df1.append(df2)
         print(df3.info())
         df3.to_csv(report_file, index=False)
