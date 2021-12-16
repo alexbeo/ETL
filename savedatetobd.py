@@ -14,11 +14,11 @@ FULL_PATH_TO_SAVE = 'transformfiles/ps_daily_report/report_d_ps_1.csv'
 
 class TransactionProcessing:
 
-    col = ['DATE', 'DAYWEEK', 'HOUR', 'MINUTE', 'SERBRTAGA', 'REGOZNIZLAZ', 'RELACIJA', 'Enter', 'VREMEULAZ',
-                     'Exit', 'VREMEIZLAZ', 'IZNOSDUGUJE']
+    in_col = ['DATE', 'DAYWEEK', 'HOUR', 'MINUTE', 'SERBRTAGA', 'REGOZNIZLAZ', 'RELACIJA', 'Enter', 'VREMEULAZ', 'Exit',
+           'VREMEIZLAZ', 'IZNOSDUGUJE']
     del_col = ['RELACIJA', 'DATE', ]
-    set_col = ['ДЕНЬ НЕДЕЛИ', 'ЧАСЫ', 'МИНУТЫ', 'ТАГ', 'ГОСНОМЕР',
-                              'ВЪЕЗД', 'ВРЕМЯ ВЪЕЗДА', 'ВЫЕЗД', 'ВРЕМЯ ВЫЕЗДА', 'К ОПЛАТЕ', ]
+    set_col = ['ДЕНЬ НЕДЕЛИ', 'ЧАСЫ', 'МИНУТЫ', 'ТАГ', 'ГОСНОМЕР', 'ВЪЕЗД', 'ВРЕМЯ ВЪЕЗДА', 'ВЫЕЗД', 'ВРЕМЯ ВЫЕЗДА',
+               'К ОПЛАТЕ', ]
 
     def __init__(self, input_file):
         self.__input_file = input_file
@@ -34,12 +34,14 @@ class TransactionProcessing:
     def read_from_csv_file(cls, input_file):
         return pd.read_csv(input_file)
 
-    def save_file(self, full_file_path):
-        self.__clear_df.to_csv(full_file_path)
+    @staticmethod
+    def save_file_to_csv(data_frame, full_file_path):
+        data_frame.to_csv(full_file_path)
 
     @staticmethod
     def delete_columns(data_frame, *args):
         return data_frame.drop(*args, axis=1)
+
     @staticmethod
     def reindex_column(data_frame, columns):
         data_frame = data_frame.reindex(columns=columns)
@@ -71,7 +73,6 @@ class TransactionProcessing:
         count_operation = self.month_data(year, month)['К ОПЛАТЕ'].count()
         return sum_operation, count_operation, medium
 
-
     @classmethod
     def clearing_dataframe(cls, data_frame):
         data_frame = data_frame[COLUMN_FOR_VIEW].copy()
@@ -90,20 +91,24 @@ class TransactionProcessing:
         new_df['Enter'] = new_df['Enter'].str[:-1]
         new_df['Exit'] = new_df['Exit'].str[1:]
         data_frame = pd.concat([data_frame, new_df], axis=1)
-        data_frame = data_frame.reindex(columns=cls.col)
+        data_frame = data_frame.reindex(columns=cls.in_col)
         data_frame = cls.delete_columns(data_frame, cls.del_col)
         data_frame.columns = cls.set_col
         return data_frame
 
 
+
 if __name__ == '__main__':
 
-    df = TransactionProcessing(FULL_PATH_TO_FILE)
+    df =TransactionProcessing(FULL_PATH_TO_FILE)
+
+
+
     # print(df.month_data(2021, 12).info())
     print(df.daily_data_agg(2021, 12).to_markdown())
     # print(df.month_data_agg(2021, (10, 11, 12)).to_markdown())
     summa, count, medium = df.one_month_sum(2021,12)
-    print(f'ИТОГО С НАЧАЛА МЕСЯЦА ВЫРУЧКА = {summa}, КОЛИЧЕСТВО ТРАНЗАКЦИЙ = {count}, СРЕДНЕЕ ЗА ДЕНЬ = {medium:.0f}')
+    print(f'ИТОГО С НАЧАЛА МЕСЯЦА ВЫРУЧКА = {summa:,.0f}, КОЛИЧЕСТВО ТРАНЗАКЦИЙ = {count}, СРЕДНЕЕ ЗА ДЕНЬ = {medium:,.0f}')
 
 
 
