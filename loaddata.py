@@ -116,20 +116,20 @@ if __name__ == '__main__':
     data = ProcessingTransactionData('transformfiles/ps_daily_report/report_d_ps.csv', )
     print(data.aggregation_data_to_weekdays())
 
-    df = data.set_month_data(2021, 12)
+    df = data.set_month_data(2022, 1)
     sum_month = df['К ОПЛАТЕ'].sum()
     sum_transactions = df['К ОПЛАТЕ'].count()
 
     medium = sum_month/sum_transactions
     day_today = int(str(datetime.date.today())[-2:])-1
-    day_in_month = calendar.monthrange(2021, 12)[1]
+    day_in_month = calendar.monthrange(2022, 1)[1]
     print(f'{day_today} === {day_in_month}')
     try:
         prediction = sum_month/day_today*day_in_month
         print(
-            f'ИТОГО ЗА МЕСЯЦ = {sum_month} ДИНАР   '
-            f'{sum_transactions} ТРАНЗАКЦИЙ '
-            f'среднее = {medium} прогноз ={prediction}')
+            f'ИТОГО ЗА МЕСЯЦ = {sum_month:,.0f} ДИНАР   '
+            f'{sum_transactions:,.0f} ТРАНЗАКЦИЙ '
+            f'среднее = {medium:,.0f} прогноз ={prediction:,.0f}')
     except Exception as ex:
         print(f'Сегодня {day_today} прогнозирование строится со 2-го дня месяца')
         print(f'{ex}')
@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
     print(data.aggregation_data_to_days())
 
-    df = data.set_month_data(2021, 11)
+    df = data.set_month_data(2021, 12)
     df_to_days = data.aggregation_data_to_days()
     df_to_days.columns = ['СУММА', "КОЛИЧЕСТВО"]
     sum = df_to_days['СУММА'].sum()
