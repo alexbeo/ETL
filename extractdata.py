@@ -58,9 +58,9 @@ def load_file_from_email_imap4(
                 # type_of_file = mime.from_file(filename)
                 # print(f'Тип файла {type_of_file}')
 
-                if filename.endswith(filetype):
+                if ('Pregled ugovora za' in filename):
                     try:
-                        with open(os.path.join(save_data_dir, filename), 'wb') as fp:
+                        with open(os.path.join(save_data_dir[1], filename), 'wb') as fp:
                             fp.write(part.get_payload(decode=True))
                         print("-- ")
                     except Exception as ex:
@@ -73,7 +73,26 @@ def load_file_from_email_imap4(
                         print(f'------------- {ex}')
 
                     try:
-                        shutil.copy2(os.path.join(save_data_dir, filename),
+                        shutil.copy2(os.path.join(save_data_dir[1], filename),
+                                     os.path.join(config.TODAY_TMP_DIR, filename))
+                    except Exception as ex:
+                        print(f'---------- {ex}')
+                if ('Izvod prometa za' in filename):
+                    try:
+                        with open(os.path.join(save_data_dir[0], filename), 'wb') as fp:
+                            fp.write(part.get_payload(decode=True))
+                        print("-- ")
+                    except Exception as ex:
+                        print(f'--------- {ex}')
+
+                    try:
+                        mail.store(num, '+FLAGS', '(\Deleted)')
+                        mail.expunge()
+                    except Exception as ex:
+                        print(f'------------- {ex}')
+
+                    try:
+                        shutil.copy2(os.path.join(save_data_dir[0], filename),
                                      os.path.join(config.TODAY_TMP_DIR, filename))
                     except Exception as ex:
                         print(f'---------- {ex}')
@@ -92,6 +111,6 @@ if __name__ == '__main__':
         imap_server=IMAP_SERVER,
         login=MAIL_LOGIN_DAILY_REPORTS,
         password=MAIL_PASSWORD1,
-        save_data_dir=DAILY_PS_TRANSACTION,
+        save_data_dir=(DAILY_PS_TRANSACTION,DAILY_PS_ACTIVATION),
         filetype='..csv',
     )
