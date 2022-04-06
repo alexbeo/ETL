@@ -7,7 +7,8 @@ MAIL_LOGIN_DAILY_REPORTS = 'listing.jpps@jugoexsim.com'
 MAIL_PASSWORD1 = '#{O$-{#n%97B'
 PATH_TO_VIEW_FILE = "transformfiles/ps_daily_report/view_daily_ps.csv"
 
-DAILY_PS_TRANSACTION = 'inputfiles/fromps/dailytransactionreports'
+DAILY_PS_TRANSACTION = 'inputfiles/fromps/dailytransactionreports/transactionreports'
+DAILY_PS_ACTIVATION = 'inputfiles/fromps/dailytransactionreports/tagactivationreports'
 PATH_TO_DAILY_REPORT_FILE_PS = 'transformfiles/ps_daily_report'
 REPORT_D_PS = 'report_d_ps.csv'
 TODAY_TMP_DIR = 'inputfiles/fromps/today_tmp_report_dir'
